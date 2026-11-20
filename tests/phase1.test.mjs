@@ -13,7 +13,7 @@ test('one second motion, yaw rotation, normalized diagonal and tick zero', () =>
   for (const [move, yaw, expected] of [[[0, 1], 0, [0, 0, 6]], [[0, 1], 90, [6, 0, 0]], [[1, 1], 0, [Math.sqrt(18), 0, Math.sqrt(18)]]]) {
     const g = new Game({ scenario: quiet }); assert.equal(g.snapshot().tick, 0);
     for (let i = 0; i < 60; i++) g.step(input({ move, cam_yaw_deg: yaw }));
-    g.player.pos.forEach((v, i) => assert.ok(Math.abs(v - expected[i]) < 1e-8)); assert.equal(g.timeLeft, 299);
+    g.player.pos.forEach((v, i) => assert.ok(Math.abs(v - expected[i]) < 1e-8)); assert.equal(g.timeLeft, 239); // Ticket-03: shorter night.
   }
 });
 test('pickup inclusive boundary and capacity', () => {
@@ -23,9 +23,9 @@ test('pickup inclusive boundary and capacity', () => {
 });
 test('deposit is edge triggered, remembers progress, nearest ties use id', () => {
   const g = new Game({ scenario: { ...quiet, player: { carried: 4 }, lanterns: [{ id: 'L2', pos: [0, 0, 1] }, { id: 'L1', pos: [0, 0, -1] }] } });
-  g.step(input({ interact: true })); assert.equal(g.lanterns[0].deposited, 4); assert.equal(g.score, 40);
+  g.step(input({ interact: true })); assert.equal(g.lanterns[0].deposited, 4); assert.equal(g.score, 20); // Ticket-03: +5 per deposited mote.
   g.player.carried = 6; g.step(input({ interact: true })); assert.equal(g.lanterns[0].deposited, 4);
-  g.step(); g.step(input({ interact: true })); assert.equal(g.lanterns[0].lit, true); assert.equal(g.score, 200);
+  g.step(); g.step(input({ interact: true })); assert.equal(g.lanterns[0].lit, true); assert.equal(g.score, 150);
 });
 test('pulse locks targets by 3D distance, costs once and prevents hit', () => {
   const g = new Game({ scenario: { ...quiet, player: { carried: 3 }, shades: [{ id: 'S1', pos: [1, 0.8, 0] }, { id: 'S2', pos: [0, 7, 0] }] } });
@@ -37,10 +37,12 @@ test('shade hit only once per tick, drops half and grants invulnerability', () =
   g.step(); assert.equal(g.player.flames, 2); assert.equal(g.player.carried, 4); assert.equal(g.motes.length, 3);
   for (let i = 0; i < 10; i++) g.step(); assert.equal(g.player.flames, 2);
 });
-test('scenario never scores, all-lit wins; no flames has higher priority', () => {
+test('scenario never scores, all-lit waits for dawn; no flames has higher priority (Ticket-03)', () => {
   const lanterns = Array.from({ length: 5 }, (_, i) => ({ id: `L${i + 1}`, lit: true }));
   const g = new Game({ scenario: { ...quiet, lanterns } }); assert.equal(g.score, 0); assert.equal(g.events.length, 0);
-  g.step(); assert.equal(g.state, 'won'); assert.equal(g.events.at(-1).data.reason, 'all_lit');
+  g.step(); assert.equal(g.state, 'playing'); assert.equal(g.score, 0);
+  const dawn = new Game({ scenario: { ...quiet, lanterns, time_left_s: 1 / 60 } }); dawn.step();
+  assert.equal(dawn.state, 'won'); assert.equal(dawn.events.at(-1).data.reason, 'dawn_survived');
   const dead = new Game({ scenario: { ...quiet, lanterns, player: { flames: 0 } } }); dead.step(); assert.equal(dead.state, 'lost');
 });
 test('invalid frames/scenario rejected, including duplicate implicit ids', () => {

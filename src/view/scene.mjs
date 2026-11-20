@@ -95,7 +95,10 @@ export class WorldView {
       group.add(mesh(new THREE.ConeGeometry(.65, .25, 8), material(C.wood), [.92, 2.9, 0]));
       const light = new THREE.PointLight(C.light, 0, 15, 2); light.position.set(.92, 2.1, 0); group.add(light);
       const halo = mesh(new THREE.RingGeometry(1.4, 1.5, 40), new THREE.MeshBasicMaterial({ color: C.light, transparent: true, opacity: .3 }), [0, .03, 0]); halo.rotation.x = -Math.PI / 2; group.add(halo);
-      this.stage.add(group); this.lamps.push({ group, paper, light, halo });
+      const fuelBack = mesh(new THREE.PlaneGeometry(1.7, .18), new THREE.MeshBasicMaterial({ color: 0x142339, side: THREE.DoubleSide }), [.9, 3.5, 0]); group.add(fuelBack);
+      const fuelBar = mesh(new THREE.PlaneGeometry(1.6, .1), new THREE.MeshBasicMaterial({ color: C.light, side: THREE.DoubleSide }), [.9, 3.5, -.015]); group.add(fuelBar);
+      const tear = mesh(new THREE.PlaneGeometry(.08, .5), new THREE.MeshBasicMaterial({ color: C.shade, side: THREE.DoubleSide }), [.95, 2.2, -.49]); tear.rotation.z = .4; group.add(tear);
+      this.stage.add(group); this.lamps.push({ group, paper, light, halo, fuelBack, fuelBar, tear });
     }
   }
   pulse(pos) { this.pulseAge = 0; this.pulseMesh.position.set(pos[0], pos[1] + .8, pos[2]); }
@@ -106,7 +109,13 @@ export class WorldView {
     const h = terrainHeight(game.map, game.player.pos[0], game.player.pos[2]); this.shadow.visible = Number.isFinite(h); this.shadow.position.set(game.player.pos[0], Number.isFinite(h) ? h + .02 : 0, game.player.pos[2]);
     this.may.visible = !game.player.respawn;
     const lit = game.lanterns.filter(l => l.lit).length; this.ambient.intensity = .15 + .55 * lit / game.lanterns.length;
-    game.lanterns.forEach((l, i) => { const v = this.lamps[i]; v.paper.material.color.setHex(l.lit ? C.light : C.off); v.paper.material.emissiveIntensity = l.lit ? 1.5 : 0; v.paper.scale.y = l.lit ? 1 : .8; v.light.intensity = l.lit ? 45 : 0; v.halo.visible = l.lit; });
+    game.lanterns.forEach((l, i) => {
+      const v = this.lamps[i], blink = l.lit && l.fuel < 30 && Math.floor(seconds * 2) % 2 === 0 ? .35 : 1;
+      v.paper.material.color.setHex(l.lit ? C.light : C.off); v.paper.material.emissiveIntensity = l.lit ? 1.5 * blink : 0;
+      v.paper.scale.y = l.lit ? 1 : .8; v.tear.visible = !l.lit; v.light.intensity = l.lit ? 45 * blink : 0; v.halo.visible = game.isSafe(l);
+      v.fuelBack.visible = v.fuelBar.visible = l.lit; v.fuelBar.scale.x = l.fuel / 100; v.fuelBar.material.color.setHex(l.fuel < 30 ? 0xFF5A5F : C.light);
+      v.fuelBack.quaternion.copy(this.camera.quaternion); v.fuelBar.quaternion.copy(this.camera.quaternion);
+    });
     this.moteMesh.count = this.glowMesh.count = Math.min(game.motes.length, 1024);
     game.motes.slice(0, 1024).forEach((m, i) => {
       this.dummy.position.set(m.pos[0], m.pos[1] + .65 + Math.sin(seconds * 2 + i) * .16, m.pos[2]); this.dummy.scale.setScalar(1); this.dummy.updateMatrix();
@@ -144,4 +153,5 @@ export class WorldView {
     element.hidden = !outside;
     if (outside) { let x = point.x, y = point.y; if (point.z > 1) { x = -x; y = -y; } const m = Math.max(Math.abs(x), Math.abs(y), .001); element.style.left = `${50 + x / m * 43}%`; element.style.top = `${50 - y / m * 32}%`; element.style.right = 'auto'; element.firstChild.textContent = `${x < -.3 ? '←' : x > .3 ? '→' : y > 0 ? '↑' : '↓'} `; }
   }
+  applySettings(settings) { this.eyeMesh.material.color.setHex(settings.colorblind ? 0x00B3FF : C.rim); this.shadeMesh.material.emissive.setHex(settings.colorblind ? 0x00B3FF : C.rim); }
 }

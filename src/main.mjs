@@ -10,7 +10,7 @@ let game = new Game({ seed: 42 }), view, mode = 'menu', accumulator = 0, last = 
 let currentNight = 1, totalScore = 0, nightsWon = 0, lastCountdown = -1, lastWind = false;
 const settings = loadSettings(), audio = new GameAudio(); audio.volume = settings.volume;
 const keys = new Set(), pressed = new Set(); let dragging = false;
-try { view = new WorldView($('world')); view.load(game); }
+try { view = new WorldView($('world')); view.load(game); view.applySettings(settings); }
 catch (e) { $('boot-error').hidden = false; $('boot-error').textContent = `Không mở được đồ họa 3D. Hãy bật WebGL 2 trong trình duyệt.\n${e.message}`; throw e; }
 function screen(html, centered = false) { $('screen').hidden = false; $('screen').className = `screen${centered ? ' center' : ''}`; $('screen').innerHTML = html; $('hud').hidden = true; }
 function menu() {
@@ -21,7 +21,7 @@ function menu() {
 }
 function intro() {
   const names = ['Đảo Bến', 'Đảo Cau', 'Đảo Chuông'];
-  const words = ['Gom đom đóm, thắp cả năm ngọn đèn. Bóng tối cũng biết sợ ánh sáng.', 'Hai bờ đảo nối bằng chiếc cầu tre. Hãy tin những bục nhảy, nhưng cẩn thận Gió Lạc.', 'Qua những tầng mây, chuông sẽ gọi bình minh. Đi theo dốc và nhớ nhìn hướng gió.'];
+  const words = ['Gom đom đóm, giữ ít nhất ba ngọn đèn sáng tới bình minh. Nhớ châm dầu trước khi đèn tắt.', 'Hai bờ đảo nối bằng chiếc cầu tre. Hãy tin những bục nhảy, cẩn thận Gió Lạc và giữ bốn ngọn đèn.', 'Qua những tầng mây, chuông sẽ gọi bình minh. Đi theo dốc, nhìn hướng gió và giữ năm ngọn đèn.'];
   mode = 'intro'; screen(`<section class="panel"><div class="gold">ĐÊM 0${currentNight}</div><h2>${names[currentNight - 1]}</h2><p>“Mây à, mỗi đốm sáng đều có đường về.<br>${words[currentNight - 1]}”</p><div class="credit">— Ông Đăng, người giữ đèn</div><div class="button-row"><button class="primary" id="play">Mang ánh sáng về đảo →</button><button class="secondary" id="back">Về menu</button></div></section>`, true);
   $('play').onclick = start; $('back').onclick = menu;
 }
@@ -39,6 +39,7 @@ function result() {
   if (won) { totalScore += game.score; nightsWon++; } audio.event(won ? 'won' : 'lost');
   screen(`<section class="panel"><div class="gold">${won ? 'ĐẢO ĐÃ SÁNG LẠI' : 'MỘT ĐÊM CHƯA TRỌN'}</div><h2>${won ? 'Ánh sáng trở về' : 'Đừng để tắt hy vọng'}</h2><p>${won ? 'Năm ngọn đèn đã sáng. Mây đã giữ được lời hẹn với bình minh.' : 'Nghỉ một chút rồi cùng Mây thử lại nhé.'}</p><div class="gold" style="font-size:42px">${game.score.toLocaleString('vi-VN')} điểm</div><div class="button-row"><button class="primary" id="retry">Chơi lại Đêm</button><button class="secondary" id="back">Về menu</button></div></section>`, true);
   $('retry').onclick = start; $('back').onclick = menu;
+  if (won) document.querySelector('.panel p').textContent = 'Mây đã giữ đảo sáng tới bình minh. Một đêm nữa, hy vọng được gìn giữ.';
   if (won && currentNight < 3) { $('retry').textContent = 'Đêm kế tiếp →'; $('retry').onclick = () => { currentNight++; intro(); }; }
   if (won && currentNight === 3) { document.querySelector('.panel h2').textContent = 'Bình Minh'; document.querySelector('.panel p').textContent = `Ba hòn đảo đã sáng. Tổng điểm hành trình: ${totalScore}.`; $('retry').textContent = 'Hành trình mới'; $('retry').onclick = () => { currentNight = 1; totalScore = 0; nightsWon = 0; intro(); }; }
 }
@@ -52,9 +53,11 @@ function updateHUD() {
   $('pulse-cd').textContent = p.pulseCd ? `${(p.pulseCd / 60).toFixed(1)}s` : '3 đom đóm';
   $('night-label').textContent = `ĐÊM 0${currentNight} · ${game.map.name.toLocaleUpperCase('vi-VN')}`;
   $('dash-cd').textContent = p.charm > 0 ? `Bùa ${(p.charm / 60).toFixed(0)}s` : p.dashCd ? `${(p.dashCd / 60).toFixed(1)}s` : 'Sẵn sàng';
-  const nearby = game.lanterns.filter(l => !l.lit && xzDistance(l.pos, p.pos) <= 2).sort((a, b) => xzDistance(a.pos, p.pos) - xzDistance(b.pos, p.pos))[0];
-  $('interact-hint').hidden = !nearby; if (nearby) $('interact-hint').textContent = `E — Nạp ánh sáng (${nearby.deposited}/10)`;
+  const nearby = game.lanterns.filter(l => (!l.lit || l.fuel < 100) && xzDistance(l.pos, p.pos) <= 2).sort((a, b) => xzDistance(a.pos, p.pos) - xzDistance(b.pos, p.pos))[0];
+  $('interact-hint').hidden = !nearby; if (nearby) $('interact-hint').textContent = nearby.lit ? `E — Châm dầu (${Math.floor(nearby.fuel)}/100)` : `E — Nạp ánh sáng (${nearby.deposited}/${nearby.ever_lit ? 5 : 10})`;
   if (seconds > captionUntil) $('caption').textContent = '';
+  const weak = game.lanterns.filter(l => l.lit && l.fuel < 30);
+  if (weak.length && seconds > captionUntil) $('caption').textContent = `⚠ Đèn ${weak.map(l => l.id).join(', ')} sắp cạn dầu!`;
   if (sec <= 10 && sec !== lastCountdown) { lastCountdown = sec; audio.event('countdown'); $('caption').textContent = `⚠ Còn ${sec} giây đến bình minh`; captionUntil = seconds + .9; }
   if (game.night === 3 && game.simTick % 1800 >= 1680 && !game.wind.active) { if (!lastWind) audio.event('wind'); $('caption').textContent = '⚠ Lá bay trong gió — gió mạnh sắp thổi!'; captionUntil = seconds + 1; lastWind = true; } else lastWind = false;
   view.updateObjective(game, $('objective-arrow'));
@@ -98,7 +101,11 @@ function showSettings(back) {
   $('volume').oninput = e => { settings.volume = Number(e.target.value); audio.volume = settings.volume; saveSettings(settings); };
   $('sensitivity').oninput = e => { settings.sensitivity = Number(e.target.value); saveSettings(settings); };
   $('settings-back').onclick = back;
+  const row = document.createElement('div'); row.className = 'settings-row'; row.innerHTML = `<label for="colorblind">Bảng màu dễ phân biệt</label><input id="colorblind" type="checkbox" ${settings.colorblind ? 'checked' : ''}>`; document.querySelector('.panel').insertBefore(row, document.querySelector('.panel .button-row'));
+  $('colorblind').onchange = e => { settings.colorblind = e.target.checked; applySettings(); saveSettings(settings); };
 }
+function applySettings() { audio.volume = settings.volume; view.applySettings(settings); document.documentElement.style.setProperty('--danger', settings.colorblind ? '#FFFFFF' : '#FF5A5F'); }
+applySettings();
 $('abilities').insertAdjacentHTML('afterbegin', '<span><kbd>Shift</kbd> Lướt <b id="dash-cd">Sẵn sàng</b></span>');
 if (new URLSearchParams(location.search).has('qa')) Object.defineProperty(window, '__lab', { get: () => ({ mode, snapshot: game.snapshot() }) });
 menu(); requestAnimationFrame(animate);

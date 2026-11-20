@@ -11,3 +11,4 @@
 - No phase tag until its tests and build pass. Document remaining limitations honestly.
 - Keep changes small; gameplay tests assert outcomes, including boundaries and regressions.
 - Phase 2: pause freezes sim_tick and every timer; GUI and CLI use the same transitions. Preserve scenario shade altitude when moving horizontally; ground-follow uses changes in terrain height.
+- Phase 3: fuelUnits is integer 1/60 fuel; drain/decay/out occur before movement. No early all_lit win; dawn threshold after every other update, no_flames first. See ADR-001 before changing scoring.

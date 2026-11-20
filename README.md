@@ -2,7 +2,7 @@
 
 **Nguyễn Văn Đăng · 2A202603371 · L3A** — Day 12 AI SDLC Lab.
 
-Game 3D góc nhìn thứ ba: cùng Mây gom đom đóm, thắp đèn và tránh Bóng Mực giữa biển mây. Bản hiện tại: Phase 2 / Test Contract 1.1. Ba Đêm: Đảo Bến, Đảo Cau, Đảo Chuông.
+Game 3D góc nhìn thứ ba: cùng Mây gom đom đóm, thắp đèn và tránh Bóng Mực giữa biển mây. Bản hiện tại: Phase 3 / Test Contract 1.2. Ba Đêm: Đảo Bến, Đảo Cau, Đảo Chuông.
 
 ## Chạy trên Windows, macOS hoặc Linux
 
@@ -20,9 +20,11 @@ Mở http://127.0.0.1:5173. Phát triển: `npm run dev`. Toàn bộ asset cục
 
 WASD: di chuyển theo camera · Space: nhảy · Shift: lướt · E: nạp ánh sáng · Q: tỏa sáng · Esc/P: tạm dừng. Giữ chuột phải và kéo để xoay camera. Thua chơi lại Đêm, thắng tiếp Đêm kế. Âm lượng và độ nhạy lưu cục bộ.
 
-## Luật và điểm Phase 1
+## Luật và điểm hiện tại (Ticket-03)
 
-5 đèn, mỗi đèn cần10 đom đóm, sức chứa10. Nạp mỗi đom đóm +10; thắp đèn +100; mỗi Bóng Mực trúng pulse +5. Thắng khi thắp hết đèn: cộng floor(giây còn)*2 +50/Ngọn Lửa còn. Hết Ngọn Lửa hoặc hết giờ thì thua. Tuning khai đầy đủ trong game.contract.json.
+Giữ ít nhất3/5,4/6,5/7 đèn sáng tới bình minh trong240/270/300giây. Đèn sáng hao1dầu/giây, Bóng Mực có thể hút thêm5/s khi dầu<30. Lần đầu cần10đomđóm; thắp lại cần5; E ở đèn sáng châm10dầu/đomđóm. Sức chứa tăng2 sau mỗi lần thắp, tối đa20.
+
+Điểm: +5/mote nạp, +100thắp đầu/+40thắp lại, pulse trúng +5/shade hoặc+15 nếu đang hút dầu. Thắng: mỗi đèn sáng +50+floor(dầu), mỗi Ngọn Lửa +50; không thưởng thời gian. Tổng hành trình chỉ cộng điểm các Đêm thắng. Tuning trong game.contract.json.
 
 ## Kiểm chứng và headless
 

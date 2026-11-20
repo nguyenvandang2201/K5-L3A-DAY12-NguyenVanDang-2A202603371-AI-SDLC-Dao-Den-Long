@@ -20,6 +20,12 @@ if (PHASE >= 2) Object.assign(cases, {
   fall: { scenario: { random_motes: false, random_shades: false, player: { pos: [45, -11, 0], carried: 8 } }, frames: [], ticks: 61 },
   wind: { night: 3, scenario: { random_motes: false, random_shades: false, random_drifters: false, player: { pos: [34, 0, 0] } }, frames: [], ticks: 2100, every: 60 }
 });
+if (PHASE >= 3) Object.assign(cases, {
+  fuel_out: { scenario: { random_motes: false, random_shades: false, lanterns: [{ id: 'L1', lit: true, fuel: 1 }] }, frames: [], ticks: 60 },
+  refuel: { scenario: { random_motes: false, random_shades: false, player: { carried: 2 }, lanterns: [{ id: 'L1', pos: [0, 0, 0], lit: true, fuel: 85 }] }, frames: [{ tick: 0, interact: true }], ticks: 1 },
+  relight: { scenario: { random_motes: false, random_shades: false, player: { carried: 5 }, lanterns: [{ id: 'L1', pos: [0, 0, 0], ever_lit: true }] }, frames: [{ tick: 0, interact: true }], ticks: 1 },
+  drain: { scenario: { random_motes: false, random_shades: false, player: { pos: [-20, 0, 0] }, lanterns: [{ id: 'L1', pos: [20, 0, 0], lit: true, fuel: 29 }], shades: [{ id: 'S1', pos: [20, .8, 0], state: 'drain', target_lantern_id: 'L1' }] }, frames: [], ticks: 60 }
+});
 for (const [name, c] of Object.entries(cases)) {
   const scenario = `${folder}/${name}.scenario.json`, inputs = `${folder}/${name}.inputs.json`, out = `${folder}/${name}.jsonl`;
   writeFileSync(scenario, JSON.stringify(c.scenario, null, 2)); writeFileSync(inputs, JSON.stringify({ frames: c.frames }, null, 2));

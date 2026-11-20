@@ -1,14 +1,14 @@
 import { ring } from './math.mjs';
 export function getMap(night = 1) {
   if (night === 1) return {
-    night, name: 'Đảo Bến', duration: 300,
+    night, name: 'Đảo Bến', duration: 240,
     islands: [{ x: 0, z: 0, radius: 40 }], pads: [], charms: [],
     lanterns: [[0, 0, 25], [23.8, 0, 7.7], [14.7, 0, -20.2], [-14.7, 0, -20.2], [-23.8, 0, 7.7]],
     motePoints: [...ring(0, 0, 12, 8), ...ring(0, 0, 33, 16)],
     shadePoints: ring(0, 0, 37, 12, 15), shadeInterval: 480, shadeCap: 6, shadeSpeed: 4
   };
   if (night === 2) return {
-    night, name: 'Đảo Cau', duration: 330,
+    night, name: 'Đảo Cau', duration: 270,
     islands: [{ x: 0, z: 0, radius: 28 }, { x: 70, z: 0, radius: 28 }],
     bridge: { x0: 26, x1: 44, z0: -2, z1: 2 },
     pads: [{ pos: [20, 0, 18], vy: 14, speed: 24, target: [70, 0, 0] }, { pos: [50, 0, -18], vy: 14, speed: 24, target: [0, 0, 0] }],
@@ -18,7 +18,7 @@ export function getMap(night = 1) {
     shadePoints: [0, 70].flatMap(x => ring(x, 0, 26, 8, 22.5)), shadeInterval: 420, shadeCap: 8, shadeSpeed: 4
   };
   if (night === 3) return {
-    night, name: 'Đảo Chuông', duration: 360,
+    night, name: 'Đảo Chuông', duration: 300,
     islands: [{ x: 0, z: 0, radius: 45 }],
     pads: [{ pos: [0, 3, 13], vy: 12, speed: 8, target: [0, 3, -10] }],
     charms: [[30, 0, 25], [-30, 0, 25]],
