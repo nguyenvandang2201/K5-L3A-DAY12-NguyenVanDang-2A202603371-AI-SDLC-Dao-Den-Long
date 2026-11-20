@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-11-20T17:28:38.955Z",
+  "viewport": [
+    1280,
+    720
+  ],
+  "renderer": "Chromium / SwiftShader (software)",
+  "checks": [
+    "menu",
+    "intro",
+    "movement",
+    "jump",
+    "pause/resume",
+    "no uncaught errors"
+  ],
+  "errors": []
+}

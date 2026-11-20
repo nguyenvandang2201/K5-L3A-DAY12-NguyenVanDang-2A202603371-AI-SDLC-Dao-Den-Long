@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-11-20T17:26:56.629Z",
+  "results": [
+    {
+      "name": "victory",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 10 --scenario docs/proof/phase-1/victory.scenario.json --inputs docs/proof/phase-1/victory.inputs.json --out docs/proof/phase-1/victory.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "won",
+        "score": 948
+      }
+    },
+    {
+      "name": "defeat",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 10 --scenario docs/proof/phase-1/defeat.scenario.json --inputs docs/proof/phase-1/defeat.inputs.json --out docs/proof/phase-1/defeat.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "lost",
+        "score": 0
+      }
+    },
+    {
+      "name": "movement",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 60 --scenario docs/proof/phase-1/movement.scenario.json --inputs docs/proof/phase-1/movement.inputs.json --out docs/proof/phase-1/movement.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 60,
+        "state": "playing",
+        "score": 0
+      }
+    }
+  ]
+}

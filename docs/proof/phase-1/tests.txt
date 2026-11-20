@@ -1,0 +1,59 @@
+$ node --test tests/phase1.test.mjs
+TAP version 13
+# Subtest: one second motion, yaw rotation, normalized diagonal and tick zero
+ok 1 - one second motion, yaw rotation, normalized diagonal and tick zero
+  ---
+  duration_ms: 4.2608
+  type: 'test'
+  ...
+# Subtest: pickup inclusive boundary and capacity
+ok 2 - pickup inclusive boundary and capacity
+  ---
+  duration_ms: 0.3942
+  type: 'test'
+  ...
+# Subtest: deposit is edge triggered, remembers progress, nearest ties use id
+ok 3 - deposit is edge triggered, remembers progress, nearest ties use id
+  ---
+  duration_ms: 0.4013
+  type: 'test'
+  ...
+# Subtest: pulse locks targets by 3D distance, costs once and prevents hit
+ok 4 - pulse locks targets by 3D distance, costs once and prevents hit
+  ---
+  duration_ms: 0.9243
+  type: 'test'
+  ...
+# Subtest: shade hit only once per tick, drops half and grants invulnerability
+ok 5 - shade hit only once per tick, drops half and grants invulnerability
+  ---
+  duration_ms: 0.424
+  type: 'test'
+  ...
+# Subtest: scenario never scores, all-lit wins; no flames has higher priority
+ok 6 - scenario never scores, all-lit wins; no flames has higher priority
+  ---
+  duration_ms: 0.3122
+  type: 'test'
+  ...
+# Subtest: invalid frames/scenario rejected, including duplicate implicit ids
+ok 7 - invalid frames/scenario rejected, including duplicate implicit ids
+  ---
+  duration_ms: 0.9375
+  type: 'test'
+  ...
+# Subtest: CLI is byte deterministic, emits final end and invalid JSON exits 2
+ok 8 - CLI is byte deterministic, emits final end and invalid JSON exits 2
+  ---
+  duration_ms: 221.6732
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 316.946

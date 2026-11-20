@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0E1430" />
+    <meta name="description" content="Đảo Đèn Lồng — hành trình giữ ánh sáng giữa biển mây." />
+    <title>Đảo Đèn Lồng</title>
+  </head>
+  <body>
+    <div id="world"></div>
+    <div id="hud" hidden>
+      <header class="hud-top">
+        <div><span class="eyebrow">NGỌN LỬA CỦA MÂY</span><div id="health" class="flames">◆ ◆ ◆</div></div>
+        <div class="time-wrap"><span id="night-label" class="eyebrow">ĐÊM 01 · ĐẢO BẾN</span><div id="timer">05:00</div></div>
+        <div class="score-wrap"><span id="lamps" class="eyebrow">ĐÈN LỒNG 0 / 5</span><div id="score">0 <small>ĐIỂM</small></div></div>
+      </header>
+      <div id="caption" role="status" aria-live="polite"></div>
+      <div id="objective-arrow" hidden>↑ <span>Đèn lồng</span></div>
+      <div id="interact-hint" hidden></div>
+      <footer class="hud-bottom"><div class="location"><span class="gold">◈</span><span>ĐÊM TRÊN BIỂN MÂY<br><small>Giữ những điều nhỏ bé sáng lên.</small></span></div><div class="carry"><div id="carry-label">ĐOM ĐÓM · 0 / 10</div><div id="carry-slots"></div></div><div id="abilities" class="abilities"><span><kbd>Q</kbd> Tỏa sáng <b id="pulse-cd">Sẵn sàng</b></span></div></footer>
+      <div class="pause-tip">ESC · Tạm dừng</div>
+    </div>
+    <main id="screen" class="screen"></main>
+    <div id="boot-error" hidden role="alert"></div>
+    <script type="module" src="/src/main.mjs"></script>
+  </body>
+</html>

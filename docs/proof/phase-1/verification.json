@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-11-20T17:28:46.674Z",
+  "phase": "phase-1",
+  "node": "v22.20.0",
+  "platform": "win32",
+  "checks": [
+    {
+      "name": "tests",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "name": "build",
+      "exit_code": 0,
+      "error": null
+    }
+  ]
+}
