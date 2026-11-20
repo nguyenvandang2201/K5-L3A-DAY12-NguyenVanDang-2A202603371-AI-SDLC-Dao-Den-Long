@@ -28,6 +28,7 @@ export class WorldView {
     this.pulseMesh = mesh(new THREE.SphereGeometry(1, 24, 12), new THREE.MeshBasicMaterial({ color: C.light, wireframe: true, transparent: true, opacity: .3 }));
     this.pulseMesh.visible = false; this.scene.add(this.pulseMesh); this.pulseAge = 100;
     this.dummy = new THREE.Object3D(); this.yaw = 0; this.cameraInitialized = false;
+    this.leaves = new THREE.InstancedMesh(new THREE.ConeGeometry(.08, .35, 3), new THREE.MeshBasicMaterial({ color: C.sand }), 24); this.scene.add(this.leaves); this.leaves.visible = false;
     window.addEventListener('resize', () => { this.camera.aspect = innerWidth / innerHeight; this.camera.updateProjectionMatrix(); this.renderer.setSize(innerWidth, innerHeight); });
   }
   buildSky() {
@@ -48,6 +49,7 @@ export class WorldView {
     const scarf = mesh(new THREE.BoxGeometry(.65, .13, .4), material(C.red), [0, 1.14, 0]); this.may.add(scarf);
     this.legs = [-1, 1].map(side => { const leg = mesh(new THREE.CylinderGeometry(.09, .1, .48, 6), material(0x25394b), [side * .16, .3, 0]); this.may.add(leg); return leg; });
     const lamp = mesh(new THREE.SphereGeometry(.16, 8, 6), material(C.light, { emissive: C.light, emissiveIntensity: 1.3 }), [.55, .92, .1]); this.may.add(lamp);
+    this.may.add(mesh(new THREE.CylinderGeometry(.012, .012, .6, 4), material(C.wood), [.55, 1.3, .1]));
     this.playerLight = new THREE.PointLight(C.light, 9, 8, 2); this.playerLight.position.set(.5, 1, .1); this.may.add(this.playerLight);
     const shadow = mesh(new THREE.CircleGeometry(.55, 20), new THREE.MeshBasicMaterial({ color: 0x091b24, transparent: true, opacity: .5 }), [0, .015, 0]); shadow.rotation.x = -Math.PI / 2; this.shadow = shadow; this.scene.add(shadow);
   }
@@ -96,7 +98,7 @@ export class WorldView {
       const light = new THREE.PointLight(C.light, 0, 15, 2); light.position.set(.92, 2.1, 0); group.add(light);
       const halo = mesh(new THREE.RingGeometry(1.4, 1.5, 40), new THREE.MeshBasicMaterial({ color: C.light, transparent: true, opacity: .3 }), [0, .03, 0]); halo.rotation.x = -Math.PI / 2; group.add(halo);
       const fuelBack = mesh(new THREE.PlaneGeometry(1.7, .18), new THREE.MeshBasicMaterial({ color: 0x142339, side: THREE.DoubleSide }), [.9, 3.5, 0]); group.add(fuelBack);
-      const fuelBar = mesh(new THREE.PlaneGeometry(1.6, .1), new THREE.MeshBasicMaterial({ color: C.light, side: THREE.DoubleSide }), [.9, 3.5, -.015]); group.add(fuelBar);
+      const fuelBar = mesh(new THREE.PlaneGeometry(1.6, .1), new THREE.MeshBasicMaterial({ color: C.light, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }), [.9, 3.5, 0]); fuelBar.renderOrder = 1; group.add(fuelBar);
       const tear = mesh(new THREE.PlaneGeometry(.08, .5), new THREE.MeshBasicMaterial({ color: C.shade, side: THREE.DoubleSide }), [.95, 2.2, -.49]); tear.rotation.z = .4; group.add(tear);
       this.stage.add(group); this.lamps.push({ group, paper, light, halo, fuelBack, fuelBar, tear });
     }
@@ -106,7 +108,7 @@ export class WorldView {
     this.may.position.set(...game.player.pos); this.may.rotation.y = Math.atan2(game.player.face[0], game.player.face[1]);
     const speed = Math.hypot(game.player.vel[0], game.player.vel[2]);
     this.legs.forEach((leg, i) => { leg.rotation.x = Math.sin(seconds * 13 + i * Math.PI) * Math.min(.5, speed * .07); });
-    const h = terrainHeight(game.map, game.player.pos[0], game.player.pos[2]); this.shadow.visible = Number.isFinite(h); this.shadow.position.set(game.player.pos[0], Number.isFinite(h) ? h + .02 : 0, game.player.pos[2]);
+    const h = terrainHeight(game.map, game.player.pos[0], game.player.pos[2]); this.shadow.visible = Number.isFinite(h); this.shadow.position.set(game.player.pos[0], Number.isFinite(h) ? h + .07 : 0, game.player.pos[2]);
     this.may.visible = !game.player.respawn;
     const lit = game.lanterns.filter(l => l.lit).length; this.ambient.intensity = .15 + .55 * lit / game.lanterns.length;
     game.lanterns.forEach((l, i) => {
@@ -132,6 +134,11 @@ export class WorldView {
     game.charms.forEach((c, i) => { if (this.charmViews[i]) { this.charmViews[i].visible = c.available; this.charmViews[i].rotation.y = seconds; } });
     while (this.drifterViews.length < game.drifters.length) { const m = mesh(new THREE.TorusKnotGeometry(.35, .1, 20, 4), material(0x8FA3B8, { emissive: 0x8FA3B8, emissiveIntensity: .3 })); this.stage.add(m); this.drifterViews.push(m); }
     this.drifterViews.forEach((m, i) => { const d = game.drifters[i]; m.visible = !!d; if (d) { m.position.set(d.pos[0], d.pos[1] + .3, d.pos[2]); m.rotation.y = seconds * 2; } });
+    this.leaves.visible = game.night === 3 && (game.wind.active || game.simTick % 1800 >= 1680) && !this.settings?.reduceMotion;
+    if (this.leaves.visible) {
+      for (let i = 0; i < 24; i++) { const a = game.wind.dir_deg * Math.PI / 180, shift = (seconds * 5 + i * 1.3) % 18 - 9; this.dummy.position.set(game.player.pos[0] + Math.cos(a) * shift + Math.sin(i) * 5, game.player.pos[1] + 1 + i % 4, game.player.pos[2] + Math.sin(a) * shift + Math.cos(i) * 5); this.dummy.scale.setScalar(1); this.dummy.rotation.set(seconds + i, a, i); this.dummy.updateMatrix(); this.leaves.setMatrixAt(i, this.dummy.matrix); }
+      this.leaves.instanceMatrix.needsUpdate = true; this.dummy.rotation.set(0, 0, 0);
+    }
     this.pulseAge += dt; this.pulseMesh.visible = this.pulseAge < .6; if (this.pulseMesh.visible) { this.pulseMesh.scale.setScalar(1 + this.pulseAge * 8); this.pulseMesh.material.opacity = .35 * (1 - this.pulseAge / .6); }
     if (benchmark) {
       const a = seconds * Math.PI * 2 / 15; this.camera.position.set(30 * Math.cos(a), 15, 30 * Math.sin(a)); this.camera.lookAt(0, 0, 0);
@@ -153,5 +160,14 @@ export class WorldView {
     element.hidden = !outside;
     if (outside) { let x = point.x, y = point.y; if (point.z > 1) { x = -x; y = -y; } const m = Math.max(Math.abs(x), Math.abs(y), .001); element.style.left = `${50 + x / m * 43}%`; element.style.top = `${50 - y / m * 32}%`; element.style.right = 'auto'; element.firstChild.textContent = `${x < -.3 ? '←' : x > .3 ? '→' : y > 0 ? '↑' : '↓'} `; }
   }
-  applySettings(settings) { this.eyeMesh.material.color.setHex(settings.colorblind ? 0x00B3FF : C.rim); this.shadeMesh.material.emissive.setHex(settings.colorblind ? 0x00B3FF : C.rim); }
+  applySettings(settings) { this.settings = settings; this.eyeMesh.material.color.setHex(settings.colorblind ? 0x00B3FF : C.rim); this.shadeMesh.material.emissive.setHex(settings.colorblind ? 0x00B3FF : C.rim); }
+  placeEdge(pos, element) {
+    const v = new THREE.Vector3(...pos).project(this.camera); let x = v.x, y = v.y;
+    if (v.z > 1) { x = -x; y = -y; } const m = Math.max(Math.abs(x), Math.abs(y), .001);
+    element.style.left = `${50 + 43 * x / m}%`; element.style.top = `${50 - 37 * y / m}%`;
+  }
+  rendererInfo() {
+    const gl = this.renderer.getContext(), ext = gl.getExtension('WEBGL_debug_renderer_info');
+    return `Three.js r${THREE.REVISION} / WebGL2 / ${ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER)}`;
+  }
 }

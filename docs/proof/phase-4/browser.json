@@ -1,0 +1,22 @@
+{
+  "generated_at": "2026-11-20T18:02:02.493Z",
+  "viewport": [
+    1280,
+    720
+  ],
+  "normal_play_avg_fps_120_frames": 120.00000000000003,
+  "renderer": "Chromium / automatic GPU selection",
+  "checks": [
+    "menu",
+    "intro",
+    "movement",
+    "jump",
+    "pause/resume",
+    "remap/conflict/reset",
+    "saved accessibility settings after reload",
+    "maps2/3 screenshots (explicit QA scenarios)",
+    "loss → save name → persistent leaderboard",
+    "no uncaught errors"
+  ],
+  "errors": []
+}

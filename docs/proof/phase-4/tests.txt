@@ -1,0 +1,209 @@
+$ node --test tests/phase1.test.mjs tests/phase2.test.mjs tests/phase3.test.mjs tests/phase4.test.mjs
+TAP version 13
+# Subtest: one second motion, yaw rotation, normalized diagonal and tick zero
+ok 1 - one second motion, yaw rotation, normalized diagonal and tick zero
+  ---
+  duration_ms: 3.9243
+  type: 'test'
+  ...
+# Subtest: pickup inclusive boundary and capacity
+ok 2 - pickup inclusive boundary and capacity
+  ---
+  duration_ms: 0.2524
+  type: 'test'
+  ...
+# Subtest: deposit is edge triggered, remembers progress, nearest ties use id
+ok 3 - deposit is edge triggered, remembers progress, nearest ties use id
+  ---
+  duration_ms: 0.5173
+  type: 'test'
+  ...
+# Subtest: pulse locks targets by 3D distance, costs once and prevents hit
+ok 4 - pulse locks targets by 3D distance, costs once and prevents hit
+  ---
+  duration_ms: 1.008
+  type: 'test'
+  ...
+# Subtest: shade hit only once per tick, drops half and grants invulnerability
+ok 5 - shade hit only once per tick, drops half and grants invulnerability
+  ---
+  duration_ms: 0.4811
+  type: 'test'
+  ...
+# Subtest: scenario never scores, all-lit waits for dawn; no flames has higher priority (Ticket-03)
+ok 6 - scenario never scores, all-lit waits for dawn; no flames has higher priority (Ticket-03)
+  ---
+  duration_ms: 0.6691
+  type: 'test'
+  ...
+# Subtest: invalid frames/scenario rejected, including duplicate implicit ids
+ok 7 - invalid frames/scenario rejected, including duplicate implicit ids
+  ---
+  duration_ms: 0.7627
+  type: 'test'
+  ...
+# Subtest: CLI is byte deterministic, emits final end and invalid JSON exits 2
+ok 8 - CLI is byte deterministic, emits final end and invalid JSON exits 2
+  ---
+  duration_ms: 165.8441
+  type: 'test'
+  ...
+# Subtest: dash 12 ticks gives 2.8m and freezes altitude; cooldown start based
+ok 9 - dash 12 ticks gives 2.8m and freezes altitude; cooldown start based
+  ---
+  duration_ms: 2.2907
+  type: 'test'
+  ...
+# Subtest: pause advances only outer tick and holds timers/input
+ok 10 - pause advances only outer tick and holds timers/input
+  ---
+  duration_ms: 0.2985
+  type: 'test'
+  ...
+# Subtest: fall ignores invuln, drops all once, respawns exactly after60 ticks
+ok 11 - fall ignores invuln, drops all once, respawns exactly after60 ticks
+  ---
+  duration_ms: 0.7102
+  type: 'test'
+  ...
+# Subtest: bridge, ramps, tower barrier and standard map points
+ok 12 - bridge, ramps, tower barrier and standard map points
+  ---
+  duration_ms: 0.2626
+  type: 'test'
+  ...
+# Subtest: pad trajectory ignores movement until landing
+ok 13 - pad trajectory ignores movement until landing
+  ---
+  duration_ms: 1.0127
+  type: 'test'
+  ...
+# Subtest: charm pickup accelerates run and makes repeated dash cooldown free
+ok 14 - charm pickup accelerates run and makes repeated dash cooldown free
+  ---
+  duration_ms: 0.3014
+  type: 'test'
+  ...
+# Subtest: drifter steals before shade hit and pulse returns stolen motes
+ok 15 - drifter steals before shade hit and pulse returns stolen motes
+  ---
+  duration_ms: 0.8804
+  type: 'test'
+  ...
+# Subtest: spawn exact schedule, never interacts on birth tick, pause does not spawn
+ok 16 - spawn exact schedule, never interacts on birth tick, pause does not spawn
+  ---
+  duration_ms: 1.7617
+  type: 'test'
+  ...
+# Subtest: night3 wind active exactly1800..2099 and off at2100
+ok 17 - night3 wind active exactly1800..2099 and off at2100
+  ---
+  duration_ms: 10.1146
+  type: 'test'
+  ...
+# Subtest: fuel integer decay exact, out resets, ever_lit preserved
+ok 18 - fuel integer decay exact, out resets, ever_lit preserved
+  ---
+  duration_ms: 2.6588
+  type: 'test'
+  ...
+# Subtest: refuel caps100 and ceil consumption, relight5 grows capacity and scores40
+ok 19 - refuel caps100 and ceil consumption, relight5 grows capacity and scores40
+  ---
+  duration_ms: 0.5687
+  type: 'test'
+  ...
+# Subtest: scenario lit not counted; capacity clamps at20
+ok 20 - scenario lit not counted; capacity clamps at20
+  ---
+  duration_ms: 0.1824
+  type: 'test'
+  ...
+# Subtest: two draining shades consume11fuel/s and event each60, pulse drain scores15
+ok 21 - two draining shades consume11fuel/s and event each60, pulse drain scores15
+  ---
+  duration_ms: 2.0802
+  type: 'test'
+  ...
+# Subtest: safe threshold30, wander picks weak nearest, refuel ejects shades
+ok 22 - safe threshold30, wander picks weak nearest, refuel ejects shades
+  ---
+  duration_ms: 0.5745
+  type: 'test'
+  ...
+# Subtest: dawn applies last-tick extinguish/refuel and no_flames priority, exact bonus
+ok 23 - dawn applies last-tick extinguish/refuel and no_flames priority, exact bonus
+  ---
+  duration_ms: 0.3852
+  type: 'test'
+  ...
+# Subtest: leaderboard validates names, preserves fields, top10 score/time order
+ok 24 - leaderboard validates names, preserves fields, top10 score/time order
+  ---
+  duration_ms: 0.988
+  type: 'test'
+  ...
+# Subtest: benchmark frame statistics use worst1percent and nearest-rank95
+ok 25 - benchmark frame statistics use worst1percent and nearest-rank95
+  ---
+  duration_ms: 0.3071
+  type: 'test'
+  ...
+# Subtest: benchmark fixed scene remains200shades/100motes/3lit100 without gameplay side effects
+ok 26 - benchmark fixed scene remains200shades/100motes/3lit100 without gameplay side effects
+  ---
+  duration_ms: 30.2155
+  type: 'test'
+  ...
+# Subtest: contract file exactly matches runtime tuning
+ok 27 - contract file exactly matches runtime tuning
+  ---
+  duration_ms: 0.9025
+  type: 'test'
+  ...
+# Subtest: headless full final night meets30second budget without GPU
+ok 28 - headless full final night meets30second budget without GPU
+  ---
+  duration_ms: 285.406
+  type: 'test'
+  ...
+# Subtest: soak CLI runs10 worlds in one process and writes genuine RSS/results
+ok 29 - soak CLI runs10 worlds in one process and writes genuine RSS/results
+  ---
+  duration_ms: 431.3561
+  type: 'test'
+  ...
+# Subtest: server rejects cross-origin leaderboard writes and serves production index
+ok 30 - server rejects cross-origin leaderboard writes and serves production index
+  ---
+  duration_ms: 38.0159
+  type: 'test'
+  ...
+# Subtest: recoil moves full2m over60ticks; pulse pushes4m over15 and stuns120ticks
+ok 31 - recoil moves full2m over60ticks; pulse pushes4m over15 and stuns120ticks
+  ---
+  duration_ms: 1.3106
+  type: 'test'
+  ...
+# Subtest: drifter pulse drops at its location, not the player-hit ring
+ok 32 - drifter pulse drops at its location, not the player-hit ring
+  ---
+  duration_ms: 0.5492
+  type: 'test'
+  ...
+# Subtest: scenario shade centerY0 still chases, arbitrary drifter ids stay finite
+ok 33 - scenario shade centerY0 still chases, arbitrary drifter ids stay finite
+  ---
+  duration_ms: 0.733
+  type: 'test'
+  ...
+1..33
+# tests 33
+# suites 0
+# pass 33
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 933.7721

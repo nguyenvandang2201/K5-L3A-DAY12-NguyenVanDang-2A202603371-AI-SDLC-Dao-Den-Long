@@ -1,0 +1,25 @@
+{
+  "cpu": "AMD Ryzen 7 H 255 w/ Radeon 780M Graphics",
+  "ram_gb": 30.797733306884766,
+  "node": "v22.20.0",
+  "seed": 42,
+  "warmup_s": 3,
+  "duration_s": 30,
+  "viewport": [
+    1280,
+    720
+  ],
+  "software_requested": true,
+  "headless": true,
+  "scene": {
+    "night": 1,
+    "shades": 200,
+    "motes": 100,
+    "lit": 3
+  },
+  "thresholds": {
+    "avg_fps": false,
+    "p1_low_fps": false,
+    "load_ms": true
+  }
+}

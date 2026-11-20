@@ -1,7 +1,8 @@
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-const phase = process.argv[process.argv.indexOf('--phase') + 1] || 'working';
+const phaseIndex = process.argv.indexOf('--phase');
+const phase = phaseIndex >= 0 ? process.argv[phaseIndex + 1] : 'working';
 if (!/^(phase-[1-4]|working)$/.test(phase)) throw new Error('Use --phase phase-1..phase-4');
 const folder = join('docs', 'proof', phase); mkdirSync(folder, { recursive: true });
 const checks = [

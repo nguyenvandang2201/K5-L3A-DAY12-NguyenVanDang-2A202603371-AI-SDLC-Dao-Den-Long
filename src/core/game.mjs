@@ -21,7 +21,7 @@ export class Game {
     for (const [key, field] of [['invuln_ticks', 'invuln'], ['dash_cd_ticks', 'dashCd'], ['pulse_cd_ticks', 'pulseCd'], ['charm_ticks', 'charm']]) this.player[field] = scenario.player?.[key] ?? 0;
     this.randomDrifters = scenario.random_drifters ?? true; this.windEnabled = scenario.wind_enabled ?? true;
     this.wind = { active: false, dir_deg: 0 }; this.nextDrifter = 1;
-    this.drifters = (scenario.drifters ?? []).map((d, i) => ({ id: d.id ?? `D${i + 1}`, state: 'idle', stolen: 0, ticks: 240, ...d, pos: [...d.pos] }));
+    this.drifters = (scenario.drifters ?? []).map((d, i) => ({ id: d.id ?? `D${i + 1}`, state: 'idle', stolen: 0, ...d, ticks: d.state_ticks_left ?? 240, pos: [...d.pos] }));
     this.nextDrifter = this.drifters.reduce((v, d) => Math.max(v, Number(d.id.match(/^D(\d+)$/)?.[1] ?? 0) + 1), 1);
     this.drifters.sort(naturalId);
     this.charms = scenario.charms ? scenario.charms.map(c => ({ available: true, respawn: c.respawn_ticks ?? 0, ...c, pos: c.pos ?? this.map.charms[Number(c.id?.slice(1)) - 1] ?? [0, 0, 0] })) : this.map.charms.map((pos, i) => ({ id: `C${i + 1}`, pos: [...pos], available: true, respawn: 0 }));
@@ -79,7 +79,8 @@ export class Game {
     for (const c of this.charms) if (!c.available && c.respawn > 0 && --c.respawn === 0) c.available = true;
     this.updateWind();
     for (const s of this.shades) {
-      if (s.ticks > 0 && --s.ticks === 0 && (s.state === 'stunned' || s.state === 'recoil')) s.state = 'wander';
+      if (s.state === 'recoil') { if (s.ticks > 0) s.ticks--; else s.state = 'wander'; }
+      else if (['stunned', 'spawning'].includes(s.state) && (s.ticks <= 0 || --s.ticks === 0)) s.state = 'wander';
     }
     this.motes = this.motes.filter(m => m.ttl === null || --m.ttl > 0);
     this.updateFuel();
@@ -184,15 +185,19 @@ export class Game {
     this.emit('pulse', { stunned_ids: ids });
     for (const d of this.drifters) if (d.state !== 'removed' && distance3(center, d.pos) <= 5 + 1e-9) {
       if (d.state === 'chase') { d.state = 'flee'; d.ticks = 240; d.dir = direction(p.pos, d.pos); }
-      else if (d.state === 'flee' && d.stolen > 0) { this.dropMotes(d.stolen, d.pos); this.emit('drifter_drop', { drifter_id: d.id, amount: d.stolen }); d.stolen = 0; d.ticks = 120; }
+      else if (d.state === 'flee' && d.stolen > 0) {
+        const y = terrainHeight(this.map, d.pos[0], d.pos[2]);
+        for (let i = 0; i < d.stolen; i++) this.addMote([d.pos[0], Number.isFinite(y) ? y : 0, d.pos[2]], 'dropped', 480);
+        this.emit('drifter_drop', { drifter_id: d.id, amount: d.stolen }); d.stolen = 0; d.ticks = 120;
+      }
     }
   }
   shadeMove(s, d, amount) {
     const next = [s.pos[0] + d[0] * amount, s.pos[1], s.pos[2] + d[1] * amount];
-    const oldFoot = [s.pos[0], s.pos[1] - .8, s.pos[2]], nextFoot = [next[0], next[1] - .8, next[2]];
+    const oldHeight = terrainHeight(this.map, s.pos[0], s.pos[2]);
+    const oldFoot = [s.pos[0], Number.isFinite(oldHeight) ? oldHeight : s.pos[1], s.pos[2]], nextFoot = [next[0], oldFoot[1], next[2]];
     const height = terrainHeight(this.map, next[0], next[2]);
     if (!Number.isFinite(height) || blocked(this.map, oldFoot, nextFoot)) return;
-    const oldHeight = terrainHeight(this.map, s.pos[0], s.pos[2]);
     if (Number.isFinite(oldHeight)) next[1] += height - oldHeight;
     for (const l of this.lanterns) if (this.isSafe(l) && xzDistance(next, l.pos) < tuning.safe_radius - 1e-9) {
       const dir = direction(l.pos, next);
@@ -216,7 +221,7 @@ export class Game {
         if (s.pushTicks > 0) { this.shadeMove(s, s.push, tuning.pulse_push_m / 15); s.pushTicks--; }
         continue;
       }
-      if (s.state === 'recoil') { this.shadeMove(s, s.push, 2 / 60); continue; }
+      if (s.state === 'recoil') { this.shadeMove(s, s.push, 2 / 60); if (s.ticks === 0) s.state = 'wander'; continue; }
       const dist = xzDistance(s.pos, this.player.pos);
       if (s.state === 'drain') {
         const target = this.lanterns.find(l => l.id === s.target_lantern_id);
@@ -225,7 +230,7 @@ export class Game {
         else continue;
       }
       if (s.state === 'chase' && dist > 18) s.state = 'wander';
-      if (s.state === 'wander' && dist <= 12) s.state = 'chase';
+      if (s.state === 'wander' && dist <= 12 && !this.benchmark) s.state = 'chase';
       const order = (a, b) => xzDistance(s.pos, a.pos) - xzDistance(s.pos, b.pos) || naturalId(a, b);
       const weak = this.lanterns.filter(l => l.lit && l.fuelUnits < 1800).sort(order);
       const lamps = weak.length ? weak : this.lanterns.filter(l => !l.lit).sort(order);
@@ -319,7 +324,8 @@ export class Game {
       }
       const chase = this.player.carried >= 5 && xzDistance(d.pos, this.player.pos) <= 15;
       d.state = chase ? 'chase' : 'idle';
-      const dir = chase ? direction(d.pos, this.player.pos) : [Math.cos(this.simTick / 120 + Number(d.id.slice(1) || 0)), Math.sin(this.simTick / 120 + Number(d.id.slice(1) || 0))];
+      const phase = [...d.id].reduce((n, c) => n + c.charCodeAt(0), 0);
+      const dir = chase ? direction(d.pos, this.player.pos) : [Math.cos(this.simTick / 120 + phase), Math.sin(this.simTick / 120 + phase)];
       d.pos[0] += dir[0] * (chase ? 7 : 2) * DT; d.pos[2] += dir[1] * (chase ? 7 : 2) * DT;
     }
     this.drifters = this.drifters.filter(d => d.state !== 'removed');

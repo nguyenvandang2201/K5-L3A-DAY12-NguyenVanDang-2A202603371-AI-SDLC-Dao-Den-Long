@@ -1,0 +1,12 @@
+{
+  "contract_version": "1.3",
+  "avg_fps": 7.268610322096575,
+  "p1_low_fps": 4.363636363636352,
+  "frame_ms_p95": 167,
+  "frames": 217,
+  "load_ms": 952,
+  "peak_mem_mb": null,
+  "vsync_off": false,
+  "renderer": "Three.js r187 / WebGL2 / ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+  "os": "win32 10.0.26300 x64"
+}

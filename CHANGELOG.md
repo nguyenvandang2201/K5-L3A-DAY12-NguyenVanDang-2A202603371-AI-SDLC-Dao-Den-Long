@@ -1,5 +1,12 @@
 # Changelog
 
+## Phase 4 — v1.0.0 / contract 1.3
+- Benchmark cảnh chuẩn và số đo frame thật; soak10nights một process và RSS thật.
+- Top10 leaderboard lưu trên đĩa qua server localhost, fallback localStorage cho web tĩnh; CLI export.
+- Đổi đủ9phím, phát hiện trùng/reset; lưu colorblind/reduce-motion/large-text; caption và mũi tên báo shade.
+- Static server không cần dependency runtime, ZIP web dựng sẵn, video MP4 và tài liệu bàn giao.
+- Regression review sửa đủ60bước recoil2m và drifter trả đồ tại chỗ; test bổ sung để ngăn lặp.
+
 ## Phase 3 — contract 1.2 — Breaking changes
 - Thay all_lit thắng ngay bằng sống tới bình minh và tỷ lệ đèn≥60%; thời gian240/270/300s.
 - Thay điểm cũ bằng +5/mote, thắp lại40, drain-stun15, thưởng đèn/fuel/ngọn lửa tại bình minh.

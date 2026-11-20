@@ -12,3 +12,7 @@
 - Keep changes small; gameplay tests assert outcomes, including boundaries and regressions.
 - Phase 2: pause freezes sim_tick and every timer; GUI and CLI use the same transitions. Preserve scenario shade altitude when moving horizontally; ground-follow uses changes in terrain height.
 - Phase 3: fuelUnits is integer 1/60 fuel; drain/decay/out occur before movement. No early all_lit win; dawn threshold after every other update, no_flames first. See ADR-001 before changing scoring.
+- Phase 4: npm run build then npm run browser. Benchmark uses the actual shared renderer, exactly200/100 entities, warmup3s; never substitute simulation throughput for FPS. Record GPU/software mode.
+- npm run soak -- --seed 7 --nights 10 --out soak.json; RSS after reset. Do not pad memory or replace measurements.
+- QA browser scenarios require ?qa=1 and show a marker; do not present injected scenarios as natural-play victories.
+- Scenario shade.pos is its center and may have Y=0: terrain collision uses the actual ground height, not a hardcoded center offset. Preserve the supplied relative altitude.

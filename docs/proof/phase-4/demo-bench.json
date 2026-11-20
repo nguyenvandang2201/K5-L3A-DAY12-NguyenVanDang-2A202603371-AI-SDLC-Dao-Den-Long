@@ -1,0 +1,11 @@
+{
+  "contract_version": "1.3",
+  "avg_fps": 119.93598079423828,
+  "p1_low_fps": 109.89010989010093,
+  "frame_ms_p95": 8.5,
+  "frames": 3597,
+  "load_ms": 175,
+  "peak_mem_mb": null,
+  "vsync_off": false,
+  "renderer": "Three.js r187 / WebGL2 / ANGLE (AMD, AMD Radeon 780M Graphics (0x00001900) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+}

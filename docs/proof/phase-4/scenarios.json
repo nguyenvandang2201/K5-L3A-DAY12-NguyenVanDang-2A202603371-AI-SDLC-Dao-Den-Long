@@ -1,0 +1,159 @@
+{
+  "generated_at": "2026-11-20T17:55:45.869Z",
+  "results": [
+    {
+      "name": "victory",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 10 --scenario docs/proof/phase-4/victory.scenario.json --inputs docs/proof/phase-4/victory.inputs.json --out docs/proof/phase-4/victory.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "won",
+        "score": 1046
+      }
+    },
+    {
+      "name": "defeat",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 10 --scenario docs/proof/phase-4/defeat.scenario.json --inputs docs/proof/phase-4/defeat.inputs.json --out docs/proof/phase-4/defeat.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "lost",
+        "score": 0
+      }
+    },
+    {
+      "name": "movement",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 60 --scenario docs/proof/phase-4/movement.scenario.json --inputs docs/proof/phase-4/movement.inputs.json --out docs/proof/phase-4/movement.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 60,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "dash",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 12 --scenario docs/proof/phase-4/dash.scenario.json --inputs docs/proof/phase-4/dash.inputs.json --out docs/proof/phase-4/dash.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 12,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "pause",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 21 --scenario docs/proof/phase-4/pause.scenario.json --inputs docs/proof/phase-4/pause.inputs.json --out docs/proof/phase-4/pause.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 21,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "charm",
+      "command": "node scripts/headless.mjs --seed 42 --night 2 --ticks 1 --scenario docs/proof/phase-4/charm.scenario.json --inputs docs/proof/phase-4/charm.inputs.json --out docs/proof/phase-4/charm.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "drifter",
+      "command": "node scripts/headless.mjs --seed 42 --night 2 --ticks 3 --scenario docs/proof/phase-4/drifter.scenario.json --inputs docs/proof/phase-4/drifter.inputs.json --out docs/proof/phase-4/drifter.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 3,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "pad",
+      "command": "node scripts/headless.mjs --seed 42 --night 2 --ticks 90 --scenario docs/proof/phase-4/pad.scenario.json --inputs docs/proof/phase-4/pad.inputs.json --out docs/proof/phase-4/pad.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 90,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "fall",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 61 --scenario docs/proof/phase-4/fall.scenario.json --inputs docs/proof/phase-4/fall.inputs.json --out docs/proof/phase-4/fall.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 61,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "wind",
+      "command": "node scripts/headless.mjs --seed 42 --night 3 --ticks 2100 --scenario docs/proof/phase-4/wind.scenario.json --inputs docs/proof/phase-4/wind.inputs.json --out docs/proof/phase-4/wind.jsonl --snapshot-every 60",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 2100,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "fuel_out",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 60 --scenario docs/proof/phase-4/fuel_out.scenario.json --inputs docs/proof/phase-4/fuel_out.inputs.json --out docs/proof/phase-4/fuel_out.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 60,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "refuel",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 1 --scenario docs/proof/phase-4/refuel.scenario.json --inputs docs/proof/phase-4/refuel.inputs.json --out docs/proof/phase-4/refuel.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "playing",
+        "score": 10
+      }
+    },
+    {
+      "name": "relight",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 1 --scenario docs/proof/phase-4/relight.scenario.json --inputs docs/proof/phase-4/relight.inputs.json --out docs/proof/phase-4/relight.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "playing",
+        "score": 65
+      }
+    },
+    {
+      "name": "drain",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 60 --scenario docs/proof/phase-4/drain.scenario.json --inputs docs/proof/phase-4/drain.inputs.json --out docs/proof/phase-4/drain.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 60,
+        "state": "playing",
+        "score": 0
+      }
+    }
+  ]
+}

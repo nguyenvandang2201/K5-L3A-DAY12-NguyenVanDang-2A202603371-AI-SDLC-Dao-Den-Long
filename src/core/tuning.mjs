@@ -1,5 +1,5 @@
-export const PHASE = 3;
-export const CONTRACT_VERSION = '1.2';
+export const PHASE = 4;
+export const CONTRACT_VERSION = '1.3';
 export const TICK_RATE = 60;
 export const DT = 1 / TICK_RATE;
 export const tuning = Object.freeze({
