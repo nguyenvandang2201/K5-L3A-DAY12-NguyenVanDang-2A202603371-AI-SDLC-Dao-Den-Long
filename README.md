@@ -2,7 +2,7 @@
 
 **Nguyễn Văn Đăng · 2A202603371 · L3A** — Day 12 AI SDLC Lab.
 
-Game 3D góc nhìn thứ ba: cùng Mây gom đom đóm, thắp đèn và tránh Bóng Mực giữa biển mây. Bản hiện tại: Phase 1 / Test Contract 1.0.
+Game 3D góc nhìn thứ ba: cùng Mây gom đom đóm, thắp đèn và tránh Bóng Mực giữa biển mây. Bản hiện tại: Phase 2 / Test Contract 1.1. Ba Đêm: Đảo Bến, Đảo Cau, Đảo Chuông.
 
 ## Chạy trên Windows, macOS hoặc Linux
 
@@ -18,7 +18,7 @@ Mở http://127.0.0.1:5173. Phát triển: `npm run dev`. Toàn bộ asset cục
 
 ## Điều khiển
 
-WASD: di chuyển theo camera · Space: nhảy · E: nạp ánh sáng · Q: tỏa sáng · Esc/P: tạm dừng. Giữ chuột phải và kéo để xoay camera. Thua hoặc thắng có thể chơi lại.
+WASD: di chuyển theo camera · Space: nhảy · Shift: lướt · E: nạp ánh sáng · Q: tỏa sáng · Esc/P: tạm dừng. Giữ chuột phải và kéo để xoay camera. Thua chơi lại Đêm, thắng tiếp Đêm kế. Âm lượng và độ nhạy lưu cục bộ.
 
 ## Luật và điểm Phase 1
 

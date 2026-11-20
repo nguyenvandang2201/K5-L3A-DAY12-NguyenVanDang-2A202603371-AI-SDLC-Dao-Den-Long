@@ -1,0 +1,113 @@
+$ node --test tests/phase1.test.mjs tests/phase2.test.mjs
+TAP version 13
+# Subtest: one second motion, yaw rotation, normalized diagonal and tick zero
+ok 1 - one second motion, yaw rotation, normalized diagonal and tick zero
+  ---
+  duration_ms: 3.8415
+  type: 'test'
+  ...
+# Subtest: pickup inclusive boundary and capacity
+ok 2 - pickup inclusive boundary and capacity
+  ---
+  duration_ms: 0.2526
+  type: 'test'
+  ...
+# Subtest: deposit is edge triggered, remembers progress, nearest ties use id
+ok 3 - deposit is edge triggered, remembers progress, nearest ties use id
+  ---
+  duration_ms: 0.474
+  type: 'test'
+  ...
+# Subtest: pulse locks targets by 3D distance, costs once and prevents hit
+ok 4 - pulse locks targets by 3D distance, costs once and prevents hit
+  ---
+  duration_ms: 0.9589
+  type: 'test'
+  ...
+# Subtest: shade hit only once per tick, drops half and grants invulnerability
+ok 5 - shade hit only once per tick, drops half and grants invulnerability
+  ---
+  duration_ms: 0.4515
+  type: 'test'
+  ...
+# Subtest: scenario never scores, all-lit wins; no flames has higher priority
+ok 6 - scenario never scores, all-lit wins; no flames has higher priority
+  ---
+  duration_ms: 0.2163
+  type: 'test'
+  ...
+# Subtest: invalid frames/scenario rejected, including duplicate implicit ids
+ok 7 - invalid frames/scenario rejected, including duplicate implicit ids
+  ---
+  duration_ms: 0.7598
+  type: 'test'
+  ...
+# Subtest: CLI is byte deterministic, emits final end and invalid JSON exits 2
+ok 8 - CLI is byte deterministic, emits final end and invalid JSON exits 2
+  ---
+  duration_ms: 179.7302
+  type: 'test'
+  ...
+# Subtest: dash 12 ticks gives 2.8m and freezes altitude; cooldown start based
+ok 9 - dash 12 ticks gives 2.8m and freezes altitude; cooldown start based
+  ---
+  duration_ms: 2.1594
+  type: 'test'
+  ...
+# Subtest: pause advances only outer tick and holds timers/input
+ok 10 - pause advances only outer tick and holds timers/input
+  ---
+  duration_ms: 0.251
+  type: 'test'
+  ...
+# Subtest: fall ignores invuln, drops all once, respawns exactly after60 ticks
+ok 11 - fall ignores invuln, drops all once, respawns exactly after60 ticks
+  ---
+  duration_ms: 0.7014
+  type: 'test'
+  ...
+# Subtest: bridge, ramps, tower barrier and standard map points
+ok 12 - bridge, ramps, tower barrier and standard map points
+  ---
+  duration_ms: 0.2996
+  type: 'test'
+  ...
+# Subtest: pad trajectory ignores movement until landing
+ok 13 - pad trajectory ignores movement until landing
+  ---
+  duration_ms: 1.1164
+  type: 'test'
+  ...
+# Subtest: charm pickup accelerates run and makes repeated dash cooldown free
+ok 14 - charm pickup accelerates run and makes repeated dash cooldown free
+  ---
+  duration_ms: 0.2983
+  type: 'test'
+  ...
+# Subtest: drifter steals before shade hit and pulse returns stolen motes
+ok 15 - drifter steals before shade hit and pulse returns stolen motes
+  ---
+  duration_ms: 0.8626
+  type: 'test'
+  ...
+# Subtest: spawn exact schedule, never interacts on birth tick, pause does not spawn
+ok 16 - spawn exact schedule, never interacts on birth tick, pause does not spawn
+  ---
+  duration_ms: 1.3264
+  type: 'test'
+  ...
+# Subtest: night3 wind active exactly1800..2099 and off at2100
+ok 17 - night3 wind active exactly1800..2099 and off at2100
+  ---
+  duration_ms: 9.8808
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 264.429

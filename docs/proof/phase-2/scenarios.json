@@ -1,0 +1,115 @@
+{
+  "generated_at": "2026-11-20T17:34:18.849Z",
+  "results": [
+    {
+      "name": "victory",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 10 --scenario docs/proof/phase-2/victory.scenario.json --inputs docs/proof/phase-2/victory.inputs.json --out docs/proof/phase-2/victory.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "won",
+        "score": 948
+      }
+    },
+    {
+      "name": "defeat",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 10 --scenario docs/proof/phase-2/defeat.scenario.json --inputs docs/proof/phase-2/defeat.inputs.json --out docs/proof/phase-2/defeat.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "lost",
+        "score": 0
+      }
+    },
+    {
+      "name": "movement",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 60 --scenario docs/proof/phase-2/movement.scenario.json --inputs docs/proof/phase-2/movement.inputs.json --out docs/proof/phase-2/movement.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 60,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "dash",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 12 --scenario docs/proof/phase-2/dash.scenario.json --inputs docs/proof/phase-2/dash.inputs.json --out docs/proof/phase-2/dash.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 12,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "pause",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 21 --scenario docs/proof/phase-2/pause.scenario.json --inputs docs/proof/phase-2/pause.inputs.json --out docs/proof/phase-2/pause.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 21,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "charm",
+      "command": "node scripts/headless.mjs --seed 42 --night 2 --ticks 1 --scenario docs/proof/phase-2/charm.scenario.json --inputs docs/proof/phase-2/charm.inputs.json --out docs/proof/phase-2/charm.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 1,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "drifter",
+      "command": "node scripts/headless.mjs --seed 42 --night 2 --ticks 3 --scenario docs/proof/phase-2/drifter.scenario.json --inputs docs/proof/phase-2/drifter.inputs.json --out docs/proof/phase-2/drifter.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 3,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "pad",
+      "command": "node scripts/headless.mjs --seed 42 --night 2 --ticks 90 --scenario docs/proof/phase-2/pad.scenario.json --inputs docs/proof/phase-2/pad.inputs.json --out docs/proof/phase-2/pad.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 90,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "fall",
+      "command": "node scripts/headless.mjs --seed 42 --night 1 --ticks 61 --scenario docs/proof/phase-2/fall.scenario.json --inputs docs/proof/phase-2/fall.inputs.json --out docs/proof/phase-2/fall.jsonl --snapshot-every 1",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 61,
+        "state": "playing",
+        "score": 0
+      }
+    },
+    {
+      "name": "wind",
+      "command": "node scripts/headless.mjs --seed 42 --night 3 --ticks 2100 --scenario docs/proof/phase-2/wind.scenario.json --inputs docs/proof/phase-2/wind.inputs.json --out docs/proof/phase-2/wind.jsonl --snapshot-every 60",
+      "deterministic": true,
+      "end": {
+        "type": "end",
+        "ticks": 2100,
+        "state": "playing",
+        "score": 0
+      }
+    }
+  ]
+}

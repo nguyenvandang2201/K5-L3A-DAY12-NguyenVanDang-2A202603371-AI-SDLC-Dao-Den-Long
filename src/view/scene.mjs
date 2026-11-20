@@ -65,6 +65,27 @@ export class WorldView {
         const grass = mesh(new THREE.ConeGeometry(.25, .7 + i % 3 * .2, 4), material(i % 3 ? 0x3c7562 : 0x6d9569), [x, .35, z]); this.stage.add(grass);
       }
     }
+    if (game.night === 2) {
+      this.stage.add(mesh(new THREE.BoxGeometry(18, .25, 4), material(C.wood), [35, -.1, 0]));
+      for (let x = 26; x <= 44; x += .6) this.stage.add(mesh(new THREE.BoxGeometry(.08, .04, 4.1), material(C.sand), [x, .05, 0]));
+    }
+    if (game.night === 3) {
+      const upper = mesh(new THREE.CylinderGeometry(8, 8, 6, 48), material(C.grass), [0, 3, 0]); this.stage.add(upper);
+      const ring = mesh(new THREE.RingGeometry(12, 24, 64, 1, 0, Math.PI), material(C.grass, { side: THREE.DoubleSide }), [0, 3.02, 0]); ring.rotation.x = Math.PI / 2; this.stage.add(ring);
+      for (const r of [12, 24]) this.stage.add(mesh(new THREE.CylinderGeometry(r, r, 3, 48, 1, true, -Math.PI / 2, Math.PI), material(C.sand, { side: THREE.DoubleSide }), [0, 1.5, 0]));
+      for (const a of [Math.PI / 6, Math.PI * 5 / 6]) {
+        const ramp = mesh(new THREE.BoxGeometry(Math.sqrt(45), .18, 3), material(C.sand), [27 * Math.cos(a), 1.5, 27 * Math.sin(a)]);
+        ramp.rotation.set(0, -a, 0); ramp.rotateZ(-Math.atan(.5)); this.stage.add(ramp);
+      }
+      this.stage.add(mesh(new THREE.CylinderGeometry(2, 2, 8, 16), material(C.wood), [0, 10, 0]));
+      this.stage.add(mesh(new THREE.ConeGeometry(2.8, 1.5, 8), material(C.sand), [0, 14.5, 0]));
+    }
+    for (const pad of game.map.pads) {
+      const m = mesh(new THREE.CylinderGeometry(1, 1.1, .18, 16), material(C.red, { emissive: C.light, emissiveIntensity: .35 }), [pad.pos[0], pad.pos[1] + .08, pad.pos[2]]); this.stage.add(m);
+      const mark = mesh(new THREE.TorusGeometry(.7, .06, 4, 16), material(C.core), [pad.pos[0], pad.pos[1] + .2, pad.pos[2]]); mark.rotation.x = -Math.PI / 2; this.stage.add(mark);
+    }
+    this.charmViews = game.charms.map(c => { const m = mesh(new THREE.BoxGeometry(.45, .8, .08), material(C.red, { emissive: 0xF2C14E, emissiveIntensity: .35 }), [c.pos[0], c.pos[1] + 1, c.pos[2]]); this.stage.add(m); return m; });
+    this.drifterViews = [];
     for (const l of game.lanterns) {
       const group = new THREE.Group(); group.position.set(...l.pos);
       group.add(mesh(new THREE.CylinderGeometry(.09, .12, 3, 8), material(C.wood), [0, 1.5, 0]));
@@ -99,6 +120,9 @@ export class WorldView {
       [-1, 1].forEach((side, eye) => { this.dummy.position.set(s.pos[0] + side * .2, s.pos[1] + .12, s.pos[2] - .52); this.dummy.scale.setScalar(1); this.dummy.updateMatrix(); this.eyeMesh.setMatrixAt(i * 2 + eye, this.dummy.matrix); });
     });
     this.shadeMesh.instanceMatrix.needsUpdate = this.eyeMesh.instanceMatrix.needsUpdate = true; if (this.shadeMesh.instanceColor) this.shadeMesh.instanceColor.needsUpdate = true;
+    game.charms.forEach((c, i) => { if (this.charmViews[i]) { this.charmViews[i].visible = c.available; this.charmViews[i].rotation.y = seconds; } });
+    while (this.drifterViews.length < game.drifters.length) { const m = mesh(new THREE.TorusKnotGeometry(.35, .1, 20, 4), material(0x8FA3B8, { emissive: 0x8FA3B8, emissiveIntensity: .3 })); this.stage.add(m); this.drifterViews.push(m); }
+    this.drifterViews.forEach((m, i) => { const d = game.drifters[i]; m.visible = !!d; if (d) { m.position.set(d.pos[0], d.pos[1] + .3, d.pos[2]); m.rotation.y = seconds * 2; } });
     this.pulseAge += dt; this.pulseMesh.visible = this.pulseAge < .6; if (this.pulseMesh.visible) { this.pulseMesh.scale.setScalar(1 + this.pulseAge * 8); this.pulseMesh.material.opacity = .35 * (1 - this.pulseAge / .6); }
     if (benchmark) {
       const a = seconds * Math.PI * 2 / 15; this.camera.position.set(30 * Math.cos(a), 15, 30 * Math.sin(a)); this.camera.lookAt(0, 0, 0);
@@ -111,5 +135,13 @@ export class WorldView {
       this.camera.lookAt(p[0], Math.max(-8, p[1] + 1), p[2]);
     }
     this.renderer.render(this.scene, this.camera);
+  }
+  updateObjective(game, element) {
+    const candidates = game.lanterns.filter(l => !l.lit).sort((a, b) => Math.hypot(a.pos[0] - game.player.pos[0], a.pos[2] - game.player.pos[2]) - Math.hypot(b.pos[0] - game.player.pos[0], b.pos[2] - game.player.pos[2]));
+    if (!candidates.length) { element.hidden = true; return; }
+    const l = candidates[0], point = new THREE.Vector3(l.pos[0], l.pos[1] + 2, l.pos[2]).project(this.camera);
+    const outside = Math.abs(point.x) > .9 || Math.abs(point.y) > .85 || point.z > 1;
+    element.hidden = !outside;
+    if (outside) { let x = point.x, y = point.y; if (point.z > 1) { x = -x; y = -y; } const m = Math.max(Math.abs(x), Math.abs(y), .001); element.style.left = `${50 + x / m * 43}%`; element.style.top = `${50 - y / m * 32}%`; element.style.right = 'auto'; element.firstChild.textContent = `${x < -.3 ? '←' : x > .3 ? '→' : y > 0 ? '↑' : '↓'} `; }
   }
 }

@@ -1,5 +1,5 @@
-export const PHASE = 1;
-export const CONTRACT_VERSION = '1.0';
+export const PHASE = 2;
+export const CONTRACT_VERSION = '1.1';
 export const TICK_RATE = 60;
 export const DT = 1 / TICK_RATE;
 export const tuning = Object.freeze({
@@ -9,6 +9,8 @@ export const tuning = Object.freeze({
   flames: 3, invuln_s: 1.5, hit_drop_ratio: 0.5,
   pulse_stun_s: 2, pulse_push_m: 4, pulse_cooldown_s: 3,
   safe_radius: 6, shade_speed: 4, shade_hit_radius: 1,
+  dash_speed: 14, dash_duration_s: .2, dash_cooldown_s: 1.5,
+  night2_duration_s: 330, night3_duration_s: 360,
   fall_enabled: true,
   score: { per_mote: 10, per_lantern: 100, per_stun: 5, per_second_left: 2, per_flame_left: 50 }
 });

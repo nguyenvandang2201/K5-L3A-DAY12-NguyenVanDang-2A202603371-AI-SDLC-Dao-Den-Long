@@ -1,5 +1,5 @@
 {
-  "contract_version": "1.0",
+  "contract_version": "1.1",
   "team": "2A202603371-Nguyen-Van-Dang",
   "build_cmd": "npm ci && npm run build",
   "run_cmd": "node scripts/run.mjs",
@@ -23,6 +23,11 @@
     "safe_radius": 6,
     "shade_speed": 4,
     "shade_hit_radius": 1,
+    "dash_speed": 14,
+    "dash_duration_s": 0.2,
+    "dash_cooldown_s": 1.5,
+    "night2_duration_s": 330,
+    "night3_duration_s": 360,
     "fall_enabled": true,
     "score": {
       "per_mote": 10,

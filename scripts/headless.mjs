@@ -25,7 +25,7 @@ function jsonFile(path) {
 }
 export function runHeadless(args) {
   const o = parseArgs(args, ['seed', 'night', 'ticks', 'out', 'scenario', 'inputs', 'snapshot-every']);
-  const seed = intOption(o.seed, 'seed', 42, -Number.MAX_SAFE_INTEGER), night = intOption(o.night, 'night', 1, 1, 1);
+  const seed = intOption(o.seed, 'seed', 42, -Number.MAX_SAFE_INTEGER), night = intOption(o.night, 'night', 1, 1, 3);
   const ticks = intOption(o.ticks, 'ticks', undefined), every = intOption(o['snapshot-every'], 'snapshot-every', 10, 1);
   if (!o.out) throw new FormatError('Missing --out');
   const scenario = o.scenario ? validateScenario(jsonFile(o.scenario), night) : {};

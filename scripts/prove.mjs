@@ -11,10 +11,19 @@ const cases = {
   movement: { scenario: { random_motes: false, random_shades: false }, frames: [{ tick: 0, move: [0, 1], cam_yaw_deg: 90 }], ticks: 60 }
 };
 const results = [];
+if (PHASE >= 2) Object.assign(cases, {
+  dash: { scenario: { random_motes: false, random_shades: false }, frames: [{ tick: 0, dash: true }], ticks: 12 },
+  pause: { scenario: { random_motes: false, random_shades: false }, frames: [{ tick: 0, pause: true }, { tick: 1, pause: false }, { tick: 20, pause: true }], ticks: 21 },
+  charm: { night: 2, scenario: { random_motes: false, random_shades: false, player: { pos: [35, 0, 0] } }, frames: [], ticks: 1 },
+  drifter: { night: 2, scenario: { random_motes: false, random_shades: false, player: { carried: 9 }, drifters: [{ id: 'D1', pos: [0, .8, 0] }] }, frames: [{ tick: 1, pulse: true }], ticks: 3 },
+  pad: { night: 2, scenario: { random_motes: false, random_shades: false, player: { pos: [20, 0, 18] } }, frames: [], ticks: 90 },
+  fall: { scenario: { random_motes: false, random_shades: false, player: { pos: [45, -11, 0], carried: 8 } }, frames: [], ticks: 61 },
+  wind: { night: 3, scenario: { random_motes: false, random_shades: false, random_drifters: false, player: { pos: [34, 0, 0] } }, frames: [], ticks: 2100, every: 60 }
+});
 for (const [name, c] of Object.entries(cases)) {
   const scenario = `${folder}/${name}.scenario.json`, inputs = `${folder}/${name}.inputs.json`, out = `${folder}/${name}.jsonl`;
   writeFileSync(scenario, JSON.stringify(c.scenario, null, 2)); writeFileSync(inputs, JSON.stringify({ frames: c.frames }, null, 2));
-  const args = ['scripts/headless.mjs', '--seed', '42', '--night', '1', '--ticks', String(c.ticks), '--scenario', scenario, '--inputs', inputs, '--out', out, '--snapshot-every', '1'];
+  const args = ['scripts/headless.mjs', '--seed', '42', '--night', String(c.night ?? 1), '--ticks', String(c.ticks), '--scenario', scenario, '--inputs', inputs, '--out', out, '--snapshot-every', String(c.every ?? 1)];
   const run = spawnSync(process.execPath, args, { encoding: 'utf8' }); if (run.status !== 0) throw new Error(run.stderr);
   const first = readFileSync(out, 'utf8'); const repeat = spawnSync(process.execPath, args, { encoding: 'utf8' });
   if (repeat.status !== 0 || readFileSync(out, 'utf8') !== first) throw new Error('Nondeterministic output');

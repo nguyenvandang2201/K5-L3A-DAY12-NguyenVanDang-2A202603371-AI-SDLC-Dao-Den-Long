@@ -10,3 +10,4 @@
 - Preserve source lab documents, AI instructions and Git history. Never backdate tags or fabricate token metrics.
 - No phase tag until its tests and build pass. Document remaining limitations honestly.
 - Keep changes small; gameplay tests assert outcomes, including boundaries and regressions.
+- Phase 2: pause freezes sim_tick and every timer; GUI and CLI use the same transitions. Preserve scenario shade altitude when moving horizontally; ground-follow uses changes in terrain height.
